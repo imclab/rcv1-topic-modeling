@@ -74,11 +74,11 @@ public class TopicModeling  {
 		FeatureSequence tokens = (FeatureSequence) model.getData().get(0).instance.getData();
 		LabelSequence topics = model.getData().get(0).topicSequence;
 
-		Formatter out = new Formatter(new StringBuilder(), Locale.US);
-		for (int position = 0; position < tokens.getLength(); position++) {
-			out.format("%s-%d ", dataAlphabet.lookupObject(tokens.getIndexAtPosition(position)), topics.getIndexAtPosition(position));
-		}
-		System.out.println(out);
+//		Formatter out = new Formatter(new StringBuilder(), Locale.US);
+//		for (int position = 0; position < tokens.getLength(); position++) {
+//			out.format("%s-%d ", dataAlphabet.lookupObject(tokens.getIndexAtPosition(position)), topics.getIndexAtPosition(position));
+//		}
+//		System.out.println(out);
 
 		// Estimate the topic distribution of the first instance, 
 		//  given the current Gibbs state.
@@ -88,19 +88,19 @@ public class TopicModeling  {
 		ArrayList<TreeSet<IDSorter>> topicSortedWords = model.getSortedWords();
 
 		// Show top 5 words in topics with proportions for the first document
-		for (int topic = 0; topic < numTopics; topic++) {
-			Iterator<IDSorter> iterator = topicSortedWords.get(topic).iterator();
-
-			out = new Formatter(new StringBuilder(), Locale.US);
-			out.format("%d\t%.3f\t", topic, topicDistribution[topic]);
-			int rank = 0;
-			while (iterator.hasNext() && rank < 5) {
-				IDSorter idCountPair = iterator.next();
-				out.format("%s (%.0f) ", dataAlphabet.lookupObject(idCountPair.getID()), idCountPair.getWeight());
-				rank++;
-			}
-			System.out.println(out);
-		}
+//		for (int topic = 0; topic < numTopics; topic++) {
+//			Iterator<IDSorter> iterator = topicSortedWords.get(topic).iterator();
+//
+//			out = new Formatter(new StringBuilder(), Locale.US);
+//			out.format("%d\t%.3f\t", topic, topicDistribution[topic]);
+//			int rank = 0;
+//			while (iterator.hasNext() && rank < 5) {
+//				IDSorter idCountPair = iterator.next();
+//				out.format("%s (%.0f) ", dataAlphabet.lookupObject(idCountPair.getID()), idCountPair.getWeight());
+//				rank++;
+//			}
+//			System.out.println(out);
+//		}
 
 		// Create a new instance with high probability of topic 0
 		StringBuilder topicZeroText = new StringBuilder();
@@ -121,8 +121,9 @@ public class TopicModeling  {
 		 * predict
 		 */
 		// Create a new instance named "test instance" with empty target and source fields.
+		String text = "The dollar rose in quiet European trading this morning, boosted by some large buy orders in a market thinned by a British bank holiday, foreign exchange dealers said. Gold rose slightly in Zurich. ``The market is really dead because London is absent,'' said one trader in Rome. In Tokyo, where trading ends as Europe's business day begins, the dollar gained sharply, closing up 0.70 yen at 134.20 yen. Later, in Europe, it was quoted at 134.25 yen. Foreign exchange dealers attributed the dollar's strong performance in Tokyo to loss-cutting and said orders concentrated there because other major markets were closed. Hong Kong's financial institutions were also closed today for a national holiday. ``Those who had sold the dollar at around 133.80 yen bought it back above the 134-yen level today,'' said a dealer at a U.S. bank's Tokyo office. ``That caused the dollar to gain sharply.'' Other dollar rates in Europe at midmorning, compared with late Friday's London rates: _1.8663 West German marks, up from 1.8565 _1.5760 Swiss francs, up from 1.5655 _6.3372 French francs, up from 6.3010 _2.1077 Dutch guilders, up from 2.0970 _1,386.25 Italian lire, down from 1,380.50 _1.2375 Canadian dollars, up from 1.23725 In Europe, the dollar made solid gains against the British pound. One pound cost $1.6855, compared with $1.7025 in London late Friday. The London bullion markets were closed for the holiday, but in Zurich the bid price for gold was $432.35, up slightly from $432.00 bid late Friday.";
 		InstanceList testing = new InstanceList(instances.getPipe());
-		testing.addThruPipe(new Instance("dollar market down rise fall trad", null, "test instance", null));
+		testing.addThruPipe(new Instance(text, null, "test instance", null));
 		TopicInferencer inferencer = model.getInferencer();
 		double[] testProbabilities = inferencer.getSampledDistribution(testing.get(0), 10, 1, 5);
 		
@@ -138,13 +139,6 @@ public class TopicModeling  {
 				}
 			}
 		}
-
-
-
-
-
-
-
 
 
 	}
