@@ -113,13 +113,40 @@ public class TopicModeling  {
 			rank++;
 		}
 
+
+		
+
+
+		/*
+		 * predict
+		 */
 		// Create a new instance named "test instance" with empty target and source fields.
 		InstanceList testing = new InstanceList(instances.getPipe());
-		testing.addThruPipe(new Instance(topicZeroText.toString(), null, "test instance", null));
-
+		testing.addThruPipe(new Instance("dollar market down rise fall trad", null, "test instance", null));
 		TopicInferencer inferencer = model.getInferencer();
 		double[] testProbabilities = inferencer.getSampledDistribution(testing.get(0), 10, 1, 5);
-		System.out.println("0\t" + testProbabilities[0]);
+		
+		for (int i=0; i<testProbabilities.length; i++) {
+			if (testProbabilities[i] > 0.2) {
+				System.out.println(i + "\t" + testProbabilities[i]);
+				Iterator<IDSorter> iterator1 = topicSortedWords.get(i).iterator();
+				int rank2 = 0;
+				while (iterator1.hasNext() && rank2 < 5) {
+					IDSorter idCountPair = iterator1.next();
+					System.out.println(dataAlphabet.lookupObject(idCountPair.getID()));
+					rank2++;
+				}
+			}
+		}
+
+
+
+
+
+
+
+
+
 	}
 }
 
