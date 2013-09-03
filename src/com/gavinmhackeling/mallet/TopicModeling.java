@@ -21,16 +21,14 @@ import cc.mallet.pipe.iterator.CsvIterator;
 import cc.mallet.topics.ParallelTopicModel;
 import cc.mallet.topics.TopicInferencer;
 import cc.mallet.types.Alphabet;
-import cc.mallet.types.FeatureSequence;
 import cc.mallet.types.IDSorter;
 import cc.mallet.types.InstanceList;
-import cc.mallet.types.LabelSequence;
 
 
 public class TopicModeling  {
 	
 	private static InstanceList instances;
-	private static InstanceList testing;
+//	private static InstanceList testing;
 
 	/**
 	 * @param args
