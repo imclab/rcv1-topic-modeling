@@ -1,0 +1,2 @@
+java -cp ./lib/mallet-2.0.8-SNAPSHOT.jar:./lib/mallet-deps.jar:./bin/ com.gavinmhackeling.mallet.TopicModeling ap.txt.train ap.txt.test 
+
