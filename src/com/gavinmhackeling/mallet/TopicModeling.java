@@ -28,14 +28,15 @@ import cc.mallet.types.InstanceList;
 public class TopicModeling  {
 	
 	private static InstanceList instances;
-//	private static InstanceList testing;
+	private static InstanceList testing;
 
 	/**
 	 * @param args
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-
+		long startTime = System.currentTimeMillis();
+		
 		// Begin by importing documents from text to feature sequences
 		ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
 
@@ -119,6 +120,7 @@ public class TopicModeling  {
 			System.out.println("\n");
 		}
 		
+		System.out.println("Completed in " + System.currentTimeMillis()-startTime + " milliseconds");
 
 	}
 
