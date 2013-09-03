@@ -120,7 +120,8 @@ public class TopicModeling  {
 			System.out.println("\n");
 		}
 		
-		System.out.println("Completed in " + System.currentTimeMillis()-startTime + " milliseconds");
+		long duration = System.currentTimeMillis()-startTime;
+		System.out.println("Completed in " + duration + " milliseconds");
 
 	}
 
