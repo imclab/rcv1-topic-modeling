@@ -36,7 +36,7 @@ import cc.mallet.types.LabelSequence;
 
 /**
  * @author gavin
- * TODO need to stem
+ * TODO need to stem,
  */
 public class IabTopicModeling  {
 

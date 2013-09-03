@@ -41,18 +41,20 @@ public class TopicModeling  {
 		ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
 
 		// Pipes: lowercase, tokenize, remove stopwords, map to features
-		pipeList.add( new CharSequenceLowercase() );
-		pipeList.add( new CharSequence2TokenSequence(Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
-		pipeList.add( new TokenSequenceRemoveStopwords(
-				new File("stoplists/en.txt"), 
-				"UTF-8", false, false, false) );
+		pipeList.add(new CharSequenceLowercase() );
+		// letter one or more letter or punctuation letter
+		pipeList.add(new CharSequence2TokenSequence(Pattern.compile("\\S+")) );
+		pipeList.add(new TokenSequenceRemoveStopwords(new File("stoplists/en.txt"), "UTF-8", false, false, false) );
 		pipeList.add( new TokenSequence2FeatureSequence() );
 
 		instances = new InstanceList (new SerialPipes(pipeList));
 
 		Reader fileReader = new InputStreamReader(new FileInputStream(new File(args[0])), "UTF-8");
-//		instances.addThruPipe(new CsvIterator (fileReader, Pattern.compile("^(\\S*)[\\s,]*(\\S*)[\\s,]*(.*)$"), 3, 2, 1)); // data, label, name fields
-		instances.addThruPipe(new CsvIterator (fileReader, Pattern.compile("^(.+)$"), 1, 1, 1));
+//		instances.addThruPipe(new CsvIterator(fileReader, Pattern.compile("^(\\S*)[\\s,]*(\\S*)[\\s,]*(.*)$"), 3, 2, 1)); // data, label, name fields
+		System.out.println("Constructing csvIterator");
+		CsvIterator csvIterator = new CsvIterator(fileReader, Pattern.compile("^(.*)$"), 1, 1, 1);
+		System.out.println("Preparing to add through pipe");
+		instances.addThruPipe(csvIterator);
 
 		// Create a model with 100 topics, alpha_t = 0.01, beta_w = 0.01
 		//  Note that the first parameter is passed as the sum over topics, while
@@ -99,6 +101,7 @@ public class TopicModeling  {
 		 * predict
 		 */
 		// Create a new instance named "test instance" with empty target and source fields.
+		System.out.println("loading testing instances");
 		InstanceList testInstances = addTestCases(args[1]);
 		TopicInferencer inferencer = model.getInferencer();
 		for (int i=0; i<testInstances.size(); i++) {
