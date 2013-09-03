@@ -45,7 +45,7 @@ public class TopicModeling  {
 		pipeList.add( new CharSequenceLowercase() );
 		pipeList.add( new CharSequence2TokenSequence(Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
 		pipeList.add( new TokenSequenceRemoveStopwords(
-				new File("/home/gavin/dev/mallet-topic-modeling-tutorial/stoplists/en.txt"), 
+				new File("stoplists/en.txt"), 
 				"UTF-8", false, false, false) );
 		pipeList.add( new TokenSequence2FeatureSequence() );
 
