@@ -18,6 +18,7 @@ import cc.mallet.pipe.SerialPipes;
 import cc.mallet.pipe.TokenSequence2FeatureSequence;
 import cc.mallet.pipe.TokenSequenceRemoveStopwords;
 import cc.mallet.pipe.iterator.CsvIterator;
+import cc.mallet.pipe.iterator.SimpleFileLineIterator;
 import cc.mallet.topics.ParallelTopicModel;
 import cc.mallet.topics.TopicInferencer;
 import cc.mallet.types.Alphabet;
@@ -43,7 +44,8 @@ public class TopicModeling  {
 		// Pipes: lowercase, tokenize, remove stopwords, map to features
 		pipeList.add(new CharSequenceLowercase() );
 		// letter one or more letter or punctuation letter
-		pipeList.add(new CharSequence2TokenSequence(Pattern.compile("\\S+")) );
+//		pipeList.add(new CharSequence2TokenSequence(Pattern.compile("\\S+")) );
+		pipeList.add(new TokenizerPipe());
 		pipeList.add(new TokenSequenceRemoveStopwords(new File("stoplists/en.txt"), "UTF-8", false, false, false) );
 		pipeList.add( new TokenSequence2FeatureSequence() );
 
@@ -52,9 +54,13 @@ public class TopicModeling  {
 		Reader fileReader = new InputStreamReader(new FileInputStream(new File(args[0])), "UTF-8");
 //		instances.addThruPipe(new CsvIterator(fileReader, Pattern.compile("^(\\S*)[\\s,]*(\\S*)[\\s,]*(.*)$"), 3, 2, 1)); // data, label, name fields
 		System.out.println("Constructing csvIterator");
-		CsvIterator csvIterator = new CsvIterator(fileReader, Pattern.compile("^(.*)$"), 1, 1, 1);
+//		CsvIterator csvIterator = new CsvIterator(fileReader, Pattern.compile("^(.*)$"), 1, 1, 1);
+//		LineIterator lineIterator = new LineIterator(fileReader);
+		SimpleFileLineIterator simpleFileLineIterator = new SimpleFileLineIterator(new File(args[0]));
 		System.out.println("Preparing to add through pipe");
-		instances.addThruPipe(csvIterator);
+//		instances.addThruPipe(csvIterator);
+//		instances.addThruPipe(lineIterator);
+		instances.addThruPipe(simpleFileLineIterator);
 
 		// Create a model with 100 topics, alpha_t = 0.01, beta_w = 0.01
 		//  Note that the first parameter is passed as the sum over topics, while
@@ -97,31 +103,32 @@ public class TopicModeling  {
 		}
 
 		
-		/*
-		 * predict
-		 */
-		// Create a new instance named "test instance" with empty target and source fields.
-		System.out.println("loading testing instances");
-		InstanceList testInstances = addTestCases(args[1]);
-		TopicInferencer inferencer = model.getInferencer();
-		for (int i=0; i<testInstances.size(); i++) {
-			System.out.println("Test case: " + i);
-			double[] testProbabilities = inferencer.getSampledDistribution(testInstances.get(i), 10, 1, 5);
-			for (int j=0; j<testProbabilities.length; j++) {
-				if (testProbabilities[j] > 0.1) {
-					System.out.println(j + "\t" + testProbabilities[j]);
-					Iterator<IDSorter> iterator1 = topicSortedWords.get(j).iterator();
-					int count = 0;
-					while (iterator1.hasNext() && count < 10) {
-						IDSorter idCountPair = iterator1.next();
-						System.out.print(dataAlphabet.lookupObject(idCountPair.getID()) + " ");
-						count++;
-					}
-					System.out.println("\n");
-				}
-			}
-			System.out.println("\n");
-		}
+//		/*
+//		 * predict
+//		 */
+//		// Create a new instance named "test instance" with empty target and source fields.
+//		System.out.println("loading testing instances");
+//		InstanceList testInstances = addTestCases(args[1]);
+//		
+//		TopicInferencer inferencer = model.getInferencer();
+//		for (int i=0; i<testInstances.size(); i++) {
+//			System.out.println("Test case: " + i);
+//			double[] testProbabilities = inferencer.getSampledDistribution(testInstances.get(i), 10, 1, 5);
+//			for (int j=0; j<testProbabilities.length; j++) {
+//				if (testProbabilities[j] > 0.1) {
+//					System.out.println(j + "\t" + testProbabilities[j]);
+//					Iterator<IDSorter> iterator1 = topicSortedWords.get(j).iterator();
+//					int count = 0;
+//					while (iterator1.hasNext() && count < 10) {
+//						IDSorter idCountPair = iterator1.next();
+//						System.out.print(dataAlphabet.lookupObject(idCountPair.getID()) + " ");
+//						count++;
+//					}
+//					System.out.println("\n");
+//				}
+//			}
+//			System.out.println("\n");
+//		}
 		
 		long duration = System.currentTimeMillis()-startTime;
 		System.out.println("Completed in " + duration + " milliseconds");
