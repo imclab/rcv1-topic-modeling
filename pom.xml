@@ -19,6 +19,7 @@
 	</build>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.apache.opennlp</groupId>
 			<artifactId>opennlp-tools</artifactId>
